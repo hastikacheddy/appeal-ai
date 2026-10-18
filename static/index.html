@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Appeal — fight your insurance denial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="top">
+  <div class="wrap top-row">
+    <a class="brand" href="/"><span class="mark">A</span>Appeal</a>
+    <span id="mode" class="mode">checking…</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="intake" class="hero">
+    <div class="hero-copy">
+      <p class="eyebrow">Health-insurance denials</p>
+      <h1>Your insurer said no.<br>Let's write the letter that gets a yes.</h1>
+      <p class="lede">Upload the denial letter. Appeal reads it, finds your plan's rules and the clinical evidence, builds the strongest honest argument, and drafts a ready-to-send appeal with every claim cited, plus your deadline and a checklist.</p>
+      <ul class="trust">
+        <li>Nothing is stored. Your letter lives in memory for one request.</li>
+        <li>Every argument links to its source.</li>
+        <li>Built on NVIDIA Nemotron, running on Nebius Token Factory.</li>
+      </ul>
+    </div>
+
+    <form id="form" class="card intake">
+      <label id="drop" class="drop" for="file">
+        <input id="file" type="file" accept="image/*,application/pdf,.txt" multiple hidden>
+        <span class="drop-icon" aria-hidden="true">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0-4 4m4-4 4 4"/><path d="M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"/></svg>
+        </span>
+        <strong>Drop your denial letter</strong>
+        <span class="muted">Photo, scan or PDF · up to 4 pages</span>
+        <span id="filelist" class="filelist"></span>
+      </label>
+      <details class="paste">
+        <summary>Or paste the letter text</summary>
+        <textarea id="text" rows="5" placeholder="Paste the denial letter here…"></textarea>
+      </details>
+      <label class="field">
+        <span>What does your insurer not know? <em>(optional, makes the letter much stronger)</em></span>
+        <textarea id="notes" rows="3" placeholder="e.g. I did 7 weeks of physical therapy from Aug 4 to Sep 22. My left foot is getting weaker."></textarea>
+      </label>
+      <div class="actions">
+        <button class="btn primary" type="submit" id="go">Build my appeal</button>
+        <button class="btn ghost" type="button" id="sample">Try a sample letter</button>
+      </div>
+      <p class="fine">Appeal is not a lawyer or a doctor. It helps you write your own appeal; review everything before you send it.</p>
+    </form>
+  </section>
+
+  <section id="run" class="hidden">
+    <div class="run-head">
+      <div>
+        <p class="eyebrow">Working on your appeal</p>
+        <h2 id="run-title">Reading your letter…</h2>
+      </div>
+      <button class="btn ghost small" id="restart" type="button">Start over</button>
+    </div>
+    <ol id="steps" class="steps"></ol>
+  </section>
+
+  <section id="result" class="hidden">
+    <div id="demo-banner" class="banner hidden">This is a recorded sample run on a fictional letter. Add your Nebius and Tavily keys to run it live.</div>
+
+    <div class="summary">
+      <div class="card stat deadline">
+        <p class="label">Appeal deadline</p>
+        <p class="big"><span id="days">—</span><small> days left</small></p>
+        <p id="due" class="muted"></p>
+        <p id="basis" class="fine"></p>
+        <a id="ics" class="btn small" href="#">Add "send by" reminder to calendar</a>
+      </div>
+      <div class="card stat">
+        <p class="label">What they're saying</p>
+        <p id="category" class="tag"></p>
+        <p id="plain" class="plain"></p>
+      </div>
+      <div class="card stat">
+        <p class="label">Appeal strength today</p>
+        <div id="meter" class="meter" role="img"></div>
+        <p id="strength-reason" class="muted"></p>
+      </div>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button role="tab" data-tab="letter" class="on">Appeal letter</button>
+      <button role="tab" data-tab="todo">Checklist</button>
+      <button role="tab" data-tab="args">Arguments</button>
+      <button role="tab" data-tab="doctor">For your doctor</button>
+      <button role="tab" data-tab="sources">Sources</button>
+      <button role="tab" data-tab="engine">How it was built</button>
+    </nav>
+
+    <div class="panel" data-panel="letter">
+      <div class="panel-tools">
+        <span id="verify" class="verify"></span>
+        <span class="spacer"></span>
+        <button class="btn small" data-copy="letter">Copy</button>
+        <button class="btn small" data-download="letter">Download .md</button>
+        <button class="btn small" id="print">Print</button>
+      </div>
+      <article id="letter" class="paper"></article>
+    </div>
+
+    <div class="panel hidden" data-panel="todo">
+      <div class="two">
+        <div class="card">
+          <h3>Gather this evidence</h3>
+          <ul id="evidence" class="checks"></ul>
+        </div>
+        <div class="card">
+          <h3>Your next steps</h3>
+          <ol id="path" class="path"></ol>
+          <h3>Formally request from the insurer</h3>
+          <ul id="askfor" class="bullets"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel hidden" data-panel="args">
+      <div id="args" class="args"></div>
+      <div class="card weak">
+        <h3>Weak spots in the denial</h3>
+        <ul id="weak" class="bullets"></ul>
+      </div>
+    </div>
+
+    <div class="panel hidden" data-panel="doctor">
+      <div class="panel-tools">
+        <span class="muted">Hand this template to your doctor. A clinician's letter is often the single strongest piece of evidence.</span>
+        <span class="spacer"></span>
+        <button class="btn small" data-copy="doctor">Copy</button>
+      </div>
+      <article id="doctor" class="paper"></article>
+    </div>
+
+    <div class="panel hidden" data-panel="sources">
+      <ol id="sources" class="sources"></ol>
+    </div>
+
+    <div class="panel hidden" data-panel="engine">
+      <p class="muted">Each step goes to the right-sized NVIDIA Nemotron model on Nebius Token Factory: small and fast for reading and triage, Ultra only for the hard reasoning.</p>
+      <table class="ledger"><thead><tr><th>Step</th><th>Model</th><th>Tokens in / out</th><th>Seconds</th></tr></thead><tbody id="ledger"></tbody></table>
+      <h3>Facts read from your letter</h3>
+      <dl id="facts" class="facts"></dl>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap foot">Appeal · open source (MIT) · NVIDIA Nemotron on Nebius Token Factory · evidence via Tavily</footer>
+<script src="app.js"></script>
+</body>
+</html>
